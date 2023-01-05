@@ -1,0 +1,12 @@
+const methodPath = function (request, h) {
+    return ''
+}
+
+module.exports = {
+    method: 'method',
+    path: 'path',
+    options: {
+        auth: 'strategy name of false',
+    },
+    handler: methodPath
+}

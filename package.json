@@ -1,0 +1,29 @@
+{
+  "name": "bart-exam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mehanika-prog/bart-exam.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mehanika-prog/bart-exam/issues"
+  },
+  "homepage": "https://github.com/mehanika-prog/bart-exam#readme",
+  "dependencies": {
+    "@hapi/hapi": "^21.1.0",
+    "@hapi/jwt": "^3.0.0",
+    "dotenv": "^16.0.3",
+    "joi": "^17.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
