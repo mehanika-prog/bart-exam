@@ -1,7 +1,23 @@
-const Joi = require('joi');
+const Joi = require('joi')
+const Boom = require("@hapi/boom")
 
 const postRegister = function (request, h) {
-    return ''
+
+    logger.log('info', 'Handling: POST /register.')
+
+    const newUser = dbConnector.users.create(request.payload.username, request.payload.password)
+
+    if (!newUser) throw Boom.conflict('This username already exist!')
+
+    const success = filesConnector.createUserDirectory(newUser.id)
+
+    if (!success) {
+        logger.log('error', 'Something went wrong.')
+        throw Boom.badImplementation('Something went wrong.')
+    }
+
+    return h.response().code(201)
+
 }
 
 const minUnameLen = parseInt(process.env.MIN_USERNAME_LENGTH) || 8
@@ -25,9 +41,12 @@ module.exports = {
             failAction: (request, h, err) => {
                 err.output.payload.message = err.output.payload.message.replace(/"/g, '\'', )
                 delete err.output.payload.validation
-                throw err;
+                throw err
             }
-        }
+        },
+        payload: {
+            allow: 'application/json',
+        },
     },
     handler: postRegister
 }

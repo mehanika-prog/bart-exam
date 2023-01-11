@@ -1,7 +1,40 @@
-const Joi = require('joi');
+const Joi = require('joi')
+const Boom = require("@hapi/boom")
+const Jwt = require('@hapi/jwt');
+
+const { encryptPassword } = require('../utils')
+
+const tokenExpirationDelay = parseInt(process.env.JWT_EXPIRATION) || 14400
 
 const postLogin = function (request, h) {
-    return ''
+
+    logger.log('info', 'Handling: POST /login.')
+
+    const user = dbConnector.users.getByUsername(request.payload.username)
+
+    if (!user) {
+        logger.log('error', 'Can\'t find this user!')
+        throw Boom.notFound('Can\'t find this user!')
+    }
+    if (user.password !== encryptPassword(request.payload.password)) {
+        logger.log('error', 'Can\'t find this user!')
+        throw Boom.notFound('Can\'t find this user!')
+    }
+
+    const token = Jwt.token.generate(
+        {
+            userId: user.id
+        },
+        {
+            key: process.env.JWT_SECRET
+        },
+        {
+            ttlSec: tokenExpirationDelay
+        }
+    )
+
+    return h.response({ token: token }).code(200)
+
 }
 
 module.exports = {
@@ -22,7 +55,10 @@ module.exports = {
                 delete err.output.payload.validation
                 throw err;
             }
-        }
+        },
+        payload: {
+            allow: 'application/json',
+        },
     },
     handler: postLogin
 }

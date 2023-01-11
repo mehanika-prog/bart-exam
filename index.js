@@ -1,8 +1,22 @@
-// TODO Winston logging
-
 //==========/ Imports and validations. /==============================================================================//
 
 require('dotenv').config()
+
+const winston = require('winston')
+
+global.logger = winston.createLogger({
+    level: process.env.LOG_LEVEL || 'info',
+    transports: [
+        new winston.transports.File({
+            filename: process.env.LOG_FILE_PATH || './logs/default.log',
+        })
+    ],
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.splat(),
+        winston.format.simple(),
+    ),
+})
 
 const {validateEnv, registerRoutes, authenticate} = require('./utils.js')
 
@@ -11,14 +25,23 @@ validateEnv()
 const Hapi = require('@hapi/hapi')
 const Jwt = require('@hapi/jwt');
 
+global.dbConnector = require('./db/connector')
+global.filesConnector = require('./static/connector')
+
 //==========/ Server configuration. /=================================================================================//
 
 const server = Hapi.server({
     port: process.env.SERVICE_PORT,
-    host: process.env.SERVICE_HOST,
+    routes: {
+        files: {
+            relativeTo: process.env.FILES_PATH
+        }
+    },
 })
 
 const initServer = async function(s) {
+
+    await s.register(require('@hapi/inert'));
 
     await s.register(Jwt)
 
@@ -34,7 +57,7 @@ const initServer = async function(s) {
 
     s.auth.default('default')
 
-    registerRoutes(s)
+    registerRoutes(s, dbConnector)
 
 }
 
@@ -44,28 +67,28 @@ initServer(server)
     .then(() => {
         server.start()
             .then(() => {
-                console.log('Server running on %s', server.info.uri)
+                logger.log('info', 'Server running on %s', server.info.uri)
             })
             .catch(e => {
                 server.stop()
                     .then(() => {
-                        console.log('Server stopped after error!')
-                        console.log(e)
-                        console.log('Exiting process!')
+                        logger.log('info', 'Server stopped after error!')
+                        logger.log('error', e)
+                        logger.log('info', 'Exiting process!')
                         process.exit(1)
                     })
                     .catch(se => {
-                        console.log('Error during server stopping!')
-                        console.log(se)
-                        console.log('Exiting process!')
+                        logger.log('info', 'Error during server stopping!')
+                        logger.log('error', se)
+                        logger.log('info', 'Exiting process!')
                         process.exit(1)
                     })
             })
 
     })
     .catch(e => {
-        console.log('Error during server initializing!')
-        console.log(e)
-        console.log('Exiting process!')
+        logger.log('info', 'Error during server initializing!')
+        logger.log('error', e)
+        logger.log('info', 'Exiting process!')
         process.exit(1)
     })

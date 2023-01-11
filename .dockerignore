@@ -1,0 +1,4 @@
+node_modules
+static/files
+db/data
+.env

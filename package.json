@@ -18,10 +18,15 @@
   },
   "homepage": "https://github.com/mehanika-prog/bart-exam#readme",
   "dependencies": {
+    "@hapi/boom": "^10.0.0",
     "@hapi/hapi": "^21.1.0",
+    "@hapi/inert": "^7.0.0",
     "@hapi/jwt": "^3.0.0",
     "dotenv": "^16.0.3",
-    "joi": "^17.7.0"
+    "joi": "^17.7.0",
+    "sharp": "^0.31.3",
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
