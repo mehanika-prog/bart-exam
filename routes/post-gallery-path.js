@@ -54,8 +54,8 @@ const postGalleryPath = function (request, h) {
 
         uploaded: {
 
-            path: fileData.filename,
-            fullPath: gallery.path + '/' + fileData.filename,
+            path: fileData.filename.replace(/ /g, '%20'),
+            fullPath: (gallery.path + '/' + fileData.filename).replace(/ /g, '%20'),
             modified: new Date().toUTCString().replace(',', ''),
             name: capitalize(fileData.filename.split('.')[0])
 

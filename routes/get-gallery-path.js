@@ -11,12 +11,18 @@ const getGalleryPath = function (request, h) {
         throw Boom.notFound('Can\'t find gallery with this name!')
     }
 
+    const images = dbConnector.images.getByGalleryId(gallery.id)
+
     return h.response({
         gallery: {
-            path: gallery.path,
+            path: gallery.path.replace(/ /g, '%20'),
             name: gallery.name,
         },
-        images: dbConnector.images.getByGalleryId(gallery.id)
+        images: images.map(image => {
+            image.path = image.path.replace(/ /g, '%20')
+            image.fullPath = image.fullPath.replace(/ /g, '%20')
+            return image
+        })
     })
         .type('application/json')
         .code(200)

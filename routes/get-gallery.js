@@ -11,7 +11,7 @@ const getGallery = function (request, h) {
     galleries.forEach(gallery => {
 
         response.galleries.push({
-            path: gallery[dbConnector.galleries.structureIndexes.path],
+            path: gallery[dbConnector.galleries.structureIndexes.path].replace(/ /g, '%20'),
             name: gallery[dbConnector.galleries.structureIndexes.name],
         })
 
