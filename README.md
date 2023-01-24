@@ -62,4 +62,4 @@ Body params:
 
 After successfull logging in you will receive your user token.
 
-To upload the image use key `data` with binary image data as a data.
+To upload the image use key `data` with binary image data as a value.
