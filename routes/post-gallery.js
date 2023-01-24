@@ -19,7 +19,9 @@ const postGallery = function (request, h) {
         throw Boom.badImplementation('Something went wrong.')
     }
 
-    return h.response().code(201)
+    return h.response()
+        .type('application/json')
+        .code(201)
 }
 
 const minGalleryNameLength = parseInt(process.env.MIN_GALLARY_NAME_LENGTH) || 1

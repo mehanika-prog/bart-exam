@@ -63,7 +63,9 @@ const postGalleryPath = function (request, h) {
 
     }
 
-    return h.response(response).code(201)
+    return h.response(response)
+        .type('application/json')
+        .code(201)
 
 }
 

@@ -33,7 +33,9 @@ const postLogin = function (request, h) {
         }
     )
 
-    return h.response({ token: token }).code(200)
+    return h.response({ token: token })
+        .type('application/json')
+        .code(200)
 
 }
 
