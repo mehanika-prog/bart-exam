@@ -17,7 +17,7 @@ const postGalleryPath = function (request, h) {
         throw Boom.notFound('Can\'t find gallery with this name!')
     }
 
-    const fileData = request.payload.data
+    const fileData = request.payload.image
 
     if (!['image/png', 'image/jpeg'].includes(fileData.headers['content-type'])) {
         fs.unlinkSync(fileData.path)
@@ -76,10 +76,10 @@ module.exports = {
         auth: 'default',
         validate: {
             payload: Joi.object({
-                data: Joi.object()
+                image: Joi.object()
             }),
             failAction: (request, h, err) => {
-                err.output.payload.message = 'Key must be a \'data\'!'
+                err.output.payload.message = 'Key must be a \'image\'!'
                 delete err.output.payload.validation
                 throw err
             }

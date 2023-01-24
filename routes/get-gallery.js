@@ -17,7 +17,9 @@ const getGallery = function (request, h) {
 
     })
 
-    return response
+    return h.response(response)
+        .type('application/json')
+        .code(200)
 
 }
 

@@ -16,7 +16,9 @@ const postRegister = function (request, h) {
         throw Boom.badImplementation('Something went wrong.')
     }
 
-    return h.response().code(201)
+    return h.response()
+        .type('application/json')
+        .code(201)
 
 }
 

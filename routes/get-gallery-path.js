@@ -11,13 +11,15 @@ const getGalleryPath = function (request, h) {
         throw Boom.notFound('Can\'t find gallery with this name!')
     }
 
-    return {
+    return h.response({
         gallery: {
             path: gallery.path,
             name: gallery.name,
         },
         images: dbConnector.images.getByGalleryId(gallery.id)
-    }
+    })
+        .type('application/json')
+        .code(200)
 
 }
 
